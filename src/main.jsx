@@ -71,24 +71,14 @@ function Menu() {
   return (
     <main className="menu">
       <h2>Nuestro Menú</h2>
-      <Pizza
-        name="Pizza Spinaci"
-        ingredients="Tomato, mozarella, spinach, and ricotta cheese"
-        price={12}
-        photoName="pizzas/spinaci.jpg"
-      />
-      <Pizza
-        name="Pizza Funghi"
-        ingredients="Tomato, mozarella, mushrooms, and onion"
-        price={12}
-        photoName="pizzas/funghi.jpg"
-      />
-      <Pizza
-        name="Pizza Salamino"
-        ingredients="Tomato, mozarella, and pepperoni"
-        price={15}
-        photoName="pizzas/salamino.jpg"
-      />
+      <ul className="pizzas">
+        {pizzaData.map((pizza) => (
+          <Pizza
+            pizzaObj={pizza}
+            key={pizza.name}
+          />
+        ))}
+      </ul>
     </main>
   );
 }
@@ -97,11 +87,20 @@ function Footer() {
   const hour = new Date().getHours();
   const openHour = 12;
   const closeHour = 22;
-  const isOpen = hour >= openHour && hour < closeHour;
+  const isOpen = hour >= openHour && hour <= closeHour;
   console.log(isOpen);
   return (
     <footer className="footer">
-      {new Date().toLocaleTimeString()}, Estamos atendiendo
+      {isOpen ? (
+        <div className="order">
+          <p>We're open until {closeHour}:00. Come visit us or order online.</p>
+          <button className="btn">Order</button>
+        </div>
+      ) : (
+        <p>
+          We're happy to welcome you between {openHour}:00 and {closeHour}:00.
+        </p>
+      )}
     </footer>
   );
 }
@@ -109,17 +108,17 @@ function Footer() {
 function Pizza(props) {
   console.log(props);
   return (
-    <div className="pizza">
+    <li className={`pizza ${props.pizzaObj.soldOut ? "sold-out" : ""}`}>
       <img
-        src={props.photoName}
-        alt={props.name}
+        src={props.pizzaObj.photoName}
+        alt={props.pizzaObj.name}
       />
       <div>
-        <h3>{props.name}</h3>
-        <p>{props.ingredients}</p>
-        <span>{props.price}</span>
+        <h3>{props.pizzaObj.name}</h3>
+        <p>{props.pizzaObj.ingredients}</p>
+        <span>{props.pizzaObj.price}</span>
       </div>
-    </div>
+    </li>
   );
 }
 
